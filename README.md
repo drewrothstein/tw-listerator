@@ -22,6 +22,10 @@ Optionally writes the accounts that you are following to Google Cloud Storage (G
 
 ![twitter list](https://github.com/drewrothstein/tw-listerator/raw/master/errata/twitter_list.png)
 
+## Exported CSV
+
+![export csv](https://github.com/drewrothstein/tw-listerator/raw/master/errata/gcs_bucket.png)
+
 ## What does it do?
 
 It checks to see if the syncing list is created and if it isn't, it creates it.
