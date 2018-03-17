@@ -16,7 +16,7 @@ Optionally writes the accounts that you are following to Google Cloud Storage (G
 
 ## Stackdriver Logs
 
-![stackdriver logs](https://github.com/drewrothstein/tw-listerator/raw/master/errata/stackdriver_logs.png)
+![stackdriver logs](https://github.com/drewrothstein/tw-listerator/raw/master/errata/stackdriver_logs_sm.png)
 
 ## Twitter Synced List
 
