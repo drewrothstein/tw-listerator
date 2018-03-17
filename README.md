@@ -18,6 +18,10 @@ Optionally writes the accounts that you are following to Google Cloud Storage (G
 
 ![stackdriver logs](https://github.com/drewrothstein/tw-listerator/raw/master/errata/stackdriver_logs.png)
 
+## Twitter Synced List
+
+![twitter list](https://github.com/drewrothstein/tw-listerator/raw/master/errata/twitter_list.png)
+
 ## What does it do?
 
 It checks to see if the syncing list is created and if it isn't, it creates it.
