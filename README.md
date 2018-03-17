@@ -243,15 +243,15 @@ Google Cloud Platform: The App Engine Standard Environment has three costs assoc
 3) Key Management Service: Key versions + Key use operations ([here](https://cloud.google.com/kms/#cloud-kms-pricing)).
 
 Example Pricing:
-Assumptions: We are running the job in Iowa, twice a day, that takes < 1hr each run, network traffic is < 30MB, and we have two active CryptoKeys w/two decryption requests for each run.
+Assumptions: We are running the job in Iowa, hourly, that takes < 1hr each run, network traffic is < 30MB, and we have one active CryptoKey w/one decryption requests for each run.
 
 1) Compute: The B1 instance is $0.05/hr, we run 24x per day for a total of $1.20/day, (* 30) $36.00/month.
 2) Network: We do not exceed 33MB per run and are charged the minimum of $0.12/month.
-3) Key Management Service: Two active keys will be $0.12/month with the minimum of $0.03/month for Key use operations.
+3) Key Management Service: One active key will be $0.06/month with the minimum of $0.03/month for Key use operations.
 
-Estimated total under these conditions: $36.27/month.
+Estimated total under these conditions: $36.21/month.
 
-Note: If you are utilizing the Free tier (https://cloud.google.com/free/) you get 28 Instance hours per day free on Google App Engine.  Since this job only takes 15m to run (at least under my lists and queries) it will not exceed the free limit and thus Compute costs $0: 15m/run * 24/hours per day = 360m/day = 6 Instance hours per day. Therefore the above estimate is $0.27/m.
+Note: If you are utilizing the Free tier (https://cloud.google.com/free/) you get 28 Instance hours per day free on Google App Engine.  Since this job only takes a few minutes to run (at least under my account) it will not exceed the free limit and thus Compute costs $0: 15m/run * 24/hours per day = 360m/day = 6 Instance hours per day. Therefore the above estimate is $0.27/m.
 
 ## Limits
 
