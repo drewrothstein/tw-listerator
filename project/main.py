@@ -111,6 +111,29 @@ def limit_handled(cursor):
             time.sleep(15 * 60)
 
 
+def is_valid_user(api, user_id):
+    """Checked if `user_id` is a valid user. It is possible (and occurs) that
+    a `user_id` may no longer be valid. This is assumed (best guess) that this
+    takes place when a user deletes their account.
+
+    Args:
+        api: An authenticated `api` Class.
+        user_id: An id for a single user.
+
+    Returns:
+        True if a valid user, False if not a valid user.
+    """
+    logging.info('Checking validity of user: {0}'.format(user_id))
+
+    try:
+        api.get_user(user_id=user_id)
+        return True
+    except tweepy.TweepError as error:
+        logging.error('Unable to get user {0} with error: {1}'.format(
+            user_id, error))
+        return False
+
+
 def create_list(api):
     """Creates list if it does not exist.
 
@@ -172,18 +195,34 @@ def get_friends_in_list(api, list_id):
     return friends_in_list
 
 
-def add_friends_to_list(api, friends, friends_in_list, list_id):
-    """Adds members to list."""
-    logging.info('Adding friends to list')
+def sync_friends_to_list(api, friends, friends_in_list, list_id):
+    """Syncs friends to list adding and removing as needed."""
+    logging.info('Syncing friends to list')
+
     friends_to_add_to_list = []
+    friends_to_remove_from_list = []
+
+    # Add friends if not in list
     for friend in friends:
         if friend not in friends_in_list:
-            friends_to_add_to_list.append(friend)
+            if is_valid_user(api, friend):
+                friends_to_add_to_list.append(friend)
 
-    logging.info('Adding {0} friends to list'.format(len(friends_to_add_to_list)))  # noqa: E501
+    # Remove friend if in list and no longer friends
+    for friend in friends_in_list:
+        if friend not in friends:
+            if is_valid_user(api, friend):
+                friends_to_remove_from_list.append(friend)
+
+    logging.info('Adding {0} friend(s) to list'.format(len(friends_to_add_to_list)))  # noqa: E501
     for friends_chunk in chunker(friends_to_add_to_list, 100):
-        logging.info('Adding {0} friends to list'.format(len(friends_chunk)))
         api.add_list_members(user_id=friends_chunk, list_id=list_id)
+        logging.info('Added {0} friend(s) to list'.format(len(friends_chunk)))
+
+    logging.info('Removing {0} friend(s) from list'.format(len(friends_to_remove_from_list)))  # noqa: E501
+    for friends_chunk in chunker(friends_to_remove_from_list, 100):
+        api.remove_list_members(user_id=friends_chunk, list_id=list_id)
+        logging.info('Removed {0} friend(s) from list'.format(len(friends_chunk)))  # noqa: E501
 
     return
 
@@ -216,7 +255,7 @@ def runit():
     list_id         = create_list(api)                            # noqa: E221
     friends         = get_friends(api)                            # noqa: E221
     friends_in_list = get_friends_in_list(api, list_id)           # noqa: E221
-    add_friends_to_list(api, friends, friends_in_list, list_id)
+    sync_friends_to_list(api, friends, friends_in_list, list_id)
 
     if SAVE_TO_GCS:
         save_friends_to_gcs(api, friends)
