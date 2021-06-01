@@ -3,6 +3,6 @@ GoogleAppEngineCloudStorageClient==1.9.22.1
 google-api-python-client==1.7.7
 google-auth-httplib2==0.0.3
 google-cloud==0.34.0
-PyYAML==3.13
+PyYAML==5.4
 requests==2.21.0
 tweepy==3.7.0
